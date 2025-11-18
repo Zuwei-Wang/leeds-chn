@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>商家详情 - 利兹华人网</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<header>
+  <div class="nav">
+    <div class="nav-left">利兹华人网</div>
+    <div class="nav-right">
+      <a href="index.html">首页</a>
+      <a href="food.html">餐饮</a>
+      <a href="entertainment.html">娱乐</a>
+      <a href="service.html">服务</a>
+      <a href="contact.html">联系</a>
+      <a href="legal.html">法律声明</a>
+      <a href="search.html">搜索</a>
+
+    </div>
+  </div>
+</header>
+
+<main>
+  <h1 class="page-title">商家详情</h1>
+  <p class="page-subtitle">以下信息仅供参考，具体以商家实际情况为准。</p>
+
+  <div id="detail-container"></div>
+</main>
+
+<footer>
+  © <span id="year"></span> 利兹华人网
+</footer>
+
+<script src="assets/js/main.js"></script>
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+  initDetailsPage();
+  initGlobalSearchShortcut();
+</script>
+</body>
+</html>

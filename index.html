@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>利兹华人网 - 首页</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<header>
+  <div class="nav">
+    <div class="nav-left">利兹华人网</div>
+    <div class="nav-right">
+      <a href="index.html" class="active">首页</a>
+      <a href="food.html">餐饮</a>
+      <a href="entertainment.html">娱乐</a>
+      <a href="service.html">服务</a>
+      <a href="contact.html">联系</a>
+      <a href="legal.html">法律声明</a>
+      <a href="search.html">搜索</a>
+
+      <!-- 以后可以加 “消息 / 瓜 / 关于” -->
+    </div>
+  </div>
+</header>
+
+<main>
+  <h1 class="page-title">利兹华人网</h1>
+  <p class="page-subtitle">收录利兹本地华人私厨、中餐、酒吧、派对等信息。（仅信息展示，具体以商家实际情况为准）</p>
+
+<!-- 轮播区域开始 -->
+  <section class="hero">
+    <div class="hero-carousel" id="hero-carousel">
+      <div class="hero-slide active" data-index="0">
+        <img src="assets/banners/banner1.jpg" alt="利兹夜景 / 派对">
+        <div class="hero-caption">
+          <h2>利兹华人 · 夜生活 & 美食</h2>
+          <p>一站式找到私厨、中餐、酒吧、派对与服务。</p>
+        </div>
+      </div>
+
+      <div class="hero-slide" data-index="1">
+        <img src="assets/banners/banner2.jpg" alt="华人私厨">
+        <div class="hero-caption">
+          <h2>本地私厨 & 深夜外卖</h2>
+          <p>家常菜、小吃、特色菜，一起收藏起来。</p>
+        </div>
+      </div>
+
+      <div class="hero-slide" data-index="2">
+        <img src="assets/banners/banner3.jpg" alt="派对">
+        <div class="hero-caption">
+          <h2>派对品牌 & 娱乐活动</h2>
+          <p>LS1、Nobound 等 Leeds 本地派对一网打尽。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-dots" id="hero-dots"></div>
+  </section>
+  <!-- 轮播区域结束 -->
+
+  <section>
+    <h2 class="section-title">🍜 餐饮推荐</h2>
+    <div id="food-list-home" class="card-list"></div>
+  </section>
+
+  <section>
+    <h2 class="section-title">🎉 娱乐推荐</h2>
+    <div id="ent-list-home" class="card-list"></div>
+  </section>
+</main>
+
+<footer>
+  © <span id="year"></span> 利兹华人网 · 仅做信息整理，不构成任何商业或法律建议。
+</footer>
+
+<script src="assets/js/main.js"></script>
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+  initHomePage();
+  initHeroCarousel();
+  initGlobalSearchShortcut();
+</script>
+</body>
+</html>

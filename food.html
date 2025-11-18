@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>利兹华人网 - 餐饮</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<header>
+  <div class="nav">
+    <div class="nav-left">利兹华人网</div>
+    <div class="nav-right">
+      <a href="index.html">首页</a>
+      <a href="food.html" class="active">餐饮</a>
+      <a href="entertainment.html">娱乐</a>
+      <a href="service.html">服务</a>
+      <a href="contact.html">联系</a>
+      <a href="legal.html">法律声明</a>
+      <a href="search.html">搜索</a>
+
+    </div>
+  </div>
+</header>
+
+<main>
+  <h1 class="page-title">餐饮列表</h1>
+  <p class="page-subtitle">利兹华人私厨、中餐馆、小吃等。</p>
+
+  <div class="search-bar">
+    <input id="search-input" type="text" placeholder="按店名、类型、标签搜索…">
+  </div>
+
+  <div id="category-list" class="card-list"></div>
+</main>
+
+<footer>
+  © <span id="year"></span> 利兹华人网
+</footer>
+
+<script src="assets/js/main.js"></script>
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+  initCategoryPage('food');
+  initGlobalSearchShortcut();
+</script>
+</body>
+</html>
