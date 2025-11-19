@@ -246,17 +246,21 @@ async function initDetailsPage() {
 
   let imagesHtml = '';
   if (images.length) {
+    // 根据 shop.id 和图片名拼接路径，去掉原有扩展并统一使用 .jpg
+    const shortId = (shop.id || '').split('_').pop();
+    const imgs = images
+      .map(imgName => {
+        const base = imgName.replace(/\.[^/.]+$/, '');
+        return `<img src="assets/images/${shortId}/${base}.jpg" alt="${shop.name}" style="width:140px;height:auto;border-radius:8px;border:1px solid #eee;">`;
+      })
+      .join('');
+
     imagesHtml = `
       <div class="detail-row">
         <span class="detail-label">图片：</span>
       </div>
       <div class="detail-row" style="display:flex;flex-wrap:wrap;gap:8px;">
-        ${images
-          .map(
-            file =>
-              `<img src="assets/images/${file}" alt="${shop.name}" style="width:140px;height:auto;border-radius:8px;border:1px solid #eee;">`
-          )
-          .join('')}
+        ${imgs}
       </div>
     `;
   }

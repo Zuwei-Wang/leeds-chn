@@ -186,9 +186,13 @@
           imgContainer.innerHTML = "";
 
           if (shop.images && shop.images.length > 0) {
-            shop.images.forEach((src) => {
+            // images 数组里可能包含带扩展名的文件名（例如 "chef_001-1.jpg"），
+            // 这里把扩展名去掉并按目录 `assets/images/<shopId>/<imageName>.jpg` 拼接路径。
+            const shortId = (shopId || '').split('_').pop();
+            shop.images.forEach((imageName) => {
+              const base = imageName.replace(/\.[^/.]+$/, '');
               const img = document.createElement("img");
-              img.src = src;
+              img.src = `assets/images/${shortId}/${base}.jpg`;
               img.alt = shop.name || "";
               img.className = "shop-photo";
               imgContainer.appendChild(img);
