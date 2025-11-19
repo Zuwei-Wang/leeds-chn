@@ -129,9 +129,9 @@ async function initHomePage() {
   const allServices = data.filter(i => i.category === 'service');
 
   // 再随机抽取要展示的数量
-  const foods = pickRandomItems(allFoods, 6);      // 首页餐饮显示最多 6 家
-  const ents = pickRandomItems(allEnts, 6);        // 娱乐最多 6 家
-  const services = pickRandomItems(allServices, 6);// 服务最多 6 家
+  const foods = pickRandomItems(allFoods, 4);      // 首页餐饮显示最多 4 家
+  const ents = pickRandomItems(allEnts, 4);        // 娱乐最多 4 家
+  const services = pickRandomItems(allServices, 4);// 服务最多 4 家
 
   if (foodEl) {
     foodEl.innerHTML = foods.length
