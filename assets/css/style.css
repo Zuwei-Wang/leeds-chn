@@ -21,6 +21,31 @@
   --max-width: 1100px;
 }
 
+/* ========= 动画定义 ========= */
+@keyframes titleGlow {
+  0% {
+    text-shadow: 0 0 10px rgba(255, 75, 129, 0.5), 0 0 20px rgba(255, 75, 129, 0.3);
+    transform: scale(1);
+  }
+  50% {
+    text-shadow: 0 0 20px rgba(255, 75, 129, 0.8), 0 0 40px rgba(255, 75, 129, 0.5), 0 0 60px rgba(112, 158, 255, 0.3);
+    transform: scale(1.02);
+  }
+  100% {
+    text-shadow: 0 0 10px rgba(255, 75, 129, 0.5), 0 0 20px rgba(255, 75, 129, 0.3);
+    transform: scale(1);
+  }
+}
+
+@keyframes titleShine {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     --bg: #f4f5fb;
@@ -156,12 +181,31 @@ main {
   font-size: 30px;
   font-weight: 700;
   margin-bottom: 6px;
+  text-align: center;
+}
+
+.animated-title {
+  animation: titleGlow 3s ease-in-out infinite;
+  background: linear-gradient(
+    90deg,
+    var(--accent) 0%,
+    var(--accent-strong) 25%,
+    var(--accent) 50%,
+    var(--accent-strong) 75%,
+    var(--accent) 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: titleGlow 3s ease-in-out infinite;
 }
 
 .page-subtitle {
   font-size: 14px;
   color: var(--text-muted);
   margin-bottom: 22px;
+  text-align: center;
 }
 
 /* 小分区标题 */
