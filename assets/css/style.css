@@ -499,28 +499,23 @@ footer {
   filter: saturate(1.1);
 }
 
-/* 文字遮罩层 */
+/* 文字说明区域 - 在轮播图下方 */
 .hero-caption {
-  position: absolute;
-  left: 22px;
-  bottom: 22px;
-  padding: 10px 14px;
-  border-radius: 16px;
-  background: radial-gradient(circle at top left, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.45));
-  backdrop-filter: blur(10px);
-  color: #fff;
-  max-width: 70%;
+  padding: 16px 0;
+  color: var(--text-main);
+  text-align: center;
 }
 
 .hero-caption h2 {
   font-size: 18px;
   font-weight: 700;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 
 .hero-caption p {
-  font-size: 13px;
-  color: #f3f3f3;
+  font-size: 14px;
+  color: var(--text-soft);
+  margin: 0;
 }
 
 /* 底部小圆点导航 */
@@ -551,13 +546,6 @@ footer {
   .hero-carousel {
     height: 190px;
     box-shadow: 0 14px 38px rgba(0, 0, 0, 0.8);
-  }
-
-  .hero-caption {
-    left: 14px;
-    right: 14px;
-    bottom: 16px;
-    max-width: 100%;
   }
 
   .hero-caption h2 {

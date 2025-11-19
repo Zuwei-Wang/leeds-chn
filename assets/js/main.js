@@ -375,6 +375,7 @@ async function initDetailsPage() {
 function initHeroCarousel() {
   const carousel = document.getElementById('hero-carousel');
   const dotsContainer = document.getElementById('hero-dots');
+  const captionEl = document.getElementById('hero-caption');
   if (!carousel || !dotsContainer) return;
 
   const slides = Array.from(carousel.querySelectorAll('.hero-slide'));
@@ -394,6 +395,17 @@ function initHeroCarousel() {
 
   const dots = Array.from(dotsContainer.querySelectorAll('.hero-dot'));
 
+  function updateCaption(index) {
+    if (!captionEl) return;
+    const slide = slides[index];
+    const title = slide.dataset.title || '';
+    const desc = slide.dataset.desc || '';
+    const h2 = captionEl.querySelector('h2');
+    const p = captionEl.querySelector('p');
+    if (h2) h2.textContent = title;
+    if (p) p.textContent = desc;
+  }
+
   function goTo(index) {
     slides.forEach(s => s.classList.remove('active'));
     dots.forEach(d => d.classList.remove('active'));
@@ -402,6 +414,9 @@ function initHeroCarousel() {
     slides[realIndex].classList.add('active');
     dots[realIndex].classList.add('active');
     current = realIndex;
+
+    // 更新下方文字
+    updateCaption(realIndex);
   }
 
   function startAuto() {
