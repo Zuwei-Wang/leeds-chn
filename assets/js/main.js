@@ -1,24 +1,54 @@
 // assets/js/main.js
 
-// 数据文件路径
+// 数据文件路径（本地 fallback）
 const DATA_URL = 'data/shops.json';
 
 // 娱乐页额外要包含的 type（之后可以自己往里加）
 const ENTERTAINMENT_EXTRA_TYPES = ['KTV'];
 
+// 全局数据缓存
+let cachedShopsData = null;
+
 /**
  * 读取全部商家数据
+ * 优先从 Google Sheet 读取，失败则从本地 JSON 读取
  */
 async function loadShops() {
+  // 如果数据已缓存，直接返回
+  if (cachedShopsData !== null) {
+    return cachedShopsData;
+  }
+
   try {
-    const res = await fetch(DATA_URL);
-    if (!res.ok) {
-      throw new Error('加载数据失败：' + res.status);
+    // 尝试从 Google Sheet 加载
+    let data = await loadShopsFromGoogleSheet();
+    
+    if (!data || data.length === 0) {
+      // fallback 到本地 JSON
+      // const res = await fetch(DATA_URL);
+      // if (!res.ok) {
+      //   throw new Error('加载数据失败：' + res.status);
+      // }
+      // data = await res.json();
+      console.warn('Google Sheet 和本地 JSON 都无法加载数据');
+      data = [];
     }
-    const data = await res.json();
-    return Array.isArray(data) ? data : [];
+
+    cachedShopsData = Array.isArray(data) ? data : [];
+    return cachedShopsData;
   } catch (err) {
-    console.error(err);
+    console.error('加载商家数据出错:', err);
+    // 最终 fallback：从本地 JSON 加载
+    // try {
+    //   const res = await fetch(DATA_URL);
+    //   if (res.ok) {
+    //     const data = await res.json();
+    //     cachedShopsData = Array.isArray(data) ? data : [];
+    //     return cachedShopsData;
+    //   }
+    // } catch (fallbackErr) {
+    //   console.error('本地 JSON 加载也失败:', fallbackErr);
+    // }
     return [];
   }
 }
