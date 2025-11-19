@@ -17,19 +17,31 @@
 <body>
 <header>
   <div class="nav">
-    <div class="nav-left">利兹华人网</div>
-    <div class="nav-right">
-      <a href="index.html" class="active">首页</a>
-      <a href="food.html">餐饮</a>
-      <a href="entertainment.html">娱乐</a>
-      <a href="service.html">服务</a>
+  <div class="nav-left">利兹华人网</div>
+
+  <div class="nav-right">
+    <a href="index.html" class="active">首页</a>
+
+    <!-- 分类下拉菜单开始 -->
+    <div class="dropdown">
+      <button class="dropdown-toggle">选择 ▾</button>
+      <div class="dropdown-menu">
+        <a href="food.html">餐饮</a>
+        <a href="entertainment.html">娱乐</a>
+        <a href="service.html">服务</a>
+        <!-- 以后要加新的分类，直接往这里继续加 -->
+        <!-- <a href="beauty.html">美业</a> -->
+        <!-- <a href="party.html">派对 / 活动</a> -->
+      </div>
+    </div>
+    <!-- 分类下拉菜单结束 -->
+
       <a href="contact.html">联系</a>
       <a href="legal.html">法律声明</a>
       <a href="search.html">搜索</a>
-
-      <!-- 以后可以加 “消息 / 瓜 / 关于” -->
     </div>
   </div>
+
 </header>
 
 <main>
@@ -90,5 +102,25 @@
   initHeroCarousel();
   initGlobalSearchShortcut();
 </script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const dropdown = document.querySelector('.dropdown');
+    const toggleBtn = document.querySelector('.dropdown-toggle');
+
+    if (!dropdown || !toggleBtn) return;
+
+    // 点击“选择”时展开/收起
+    toggleBtn.addEventListener('click', function (e) {
+      e.stopPropagation(); // 阻止冒泡，避免立刻被下面的 document 点击事件关掉
+      dropdown.classList.toggle('open');
+    });
+
+    // 点击页面其他地方时关闭下拉
+    document.addEventListener('click', function () {
+      dropdown.classList.remove('open');
+    });
+  });
+</script>
+
 </body>
 </html>

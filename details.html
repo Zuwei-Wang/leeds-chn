@@ -1,50 +1,212 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta name="description" content="利兹华人网：收录利兹本地华人私厨、中餐、酒吧、KTV、派对信息的生活导航平台。">
-  <meta name="keywords" content="利兹华人, Leeds Chinese, 私厨, 中餐, 外卖, KTV, 派对, 华人网站, Leeds Chinese Food">
-  <meta name="author" content="Leeds Chinese Web">
-
-  <!-- 让搜索引擎知道这是移动端友好网站 -->
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>商家详情 - 利兹华人网</title>
-  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/style.css" />
+
+  <!-- 只给详情页用的一点点样式，可以以后挪到 style.css 里 -->
+  <style>
+    .details-container {
+      max-width: 900px;
+      margin: 1.5rem auto;
+      padding: 0 1rem 2rem;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 0.75rem;
+      font-size: 0.9rem;
+      text-decoration: none;
+      color: #555;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+    .details-container h1 {
+      font-size: 1.6rem;
+      margin-bottom: 1rem;
+    }
+
+    .details-section p {
+      margin: 0.25rem 0;
+      line-height: 1.4;
+    }
+
+    .details-section strong {
+      color: #444;
+    }
+
+    .details-images {
+      margin-top: 1.25rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .details-images .shop-photo {
+      max-width: 180px;
+      border-radius: 0.6rem;
+      border: 1px solid #eee;
+      object-fit: cover;
+    }
+
+    @media (max-width: 600px) {
+      .details-container {
+        padding: 0 0.75rem 2rem;
+      }
+      .details-images {
+        justify-content: flex-start;
+      }
+      .details-images .shop-photo {
+        max-width: 45%;
+      }
+    }
+  </style>
 </head>
+
 <body>
-<header>
-  <div class="nav">
-    <div class="nav-left">利兹华人网</div>
-    <div class="nav-right">
-      <a href="index.html">首页</a>
-      <a href="food.html">餐饮</a>
-      <a href="entertainment.html">娱乐</a>
-      <a href="service.html">服务</a>
-      <a href="contact.html">联系</a>
-      <a href="legal.html">法律声明</a>
-      <a href="search.html">搜索</a>
+  <!-- 顶部导航（和 index.html 保持一致） -->
+  <header>
+    <div class="nav">
+      <div class="nav-left">利兹华人网</div>
 
+      <div class="nav-right">
+        <a href="index.html">首页</a>
+
+        <!-- 分类下拉菜单 -->
+        <div class="dropdown">
+          <button class="dropdown-toggle">选择 ▾</button>
+          <div class="dropdown-menu">
+            <a href="food.html">餐饮</a>
+            <a href="entertainment.html">娱乐</a>
+            <a href="service.html">服务</a>
+          </div>
+        </div>
+
+        <a href="contact.html">联系</a>
+        <a href="legal.html">法律声明</a>
+        <a href="search.html">搜索</a>
+      </div>
     </div>
-  </div>
-</header>
+  </header>
 
-<main>
-  <h1 class="page-title">商家详情</h1>
-  <p class="page-subtitle">以下信息仅供参考，具体以商家实际情况为准。</p>
+  <!-- 主体内容：商家详情 -->
+  <main class="details-container">
+    <a href="javascript:history.back()" class="back-link">← 返回上一页</a>
 
-  <div id="detail-container"></div>
-</main>
+    <h1 id="shop-name">商家详情</h1>
 
-<footer>
-  © <span id="year"></span> 利兹华人网
-</footer>
+    <div class="details-section">
+      <p><strong>分类：</strong><span id="shop-category"></span></p>
+      <p><strong>类型：</strong><span id="shop-type"></span></p>
+      <p><strong>地址：</strong><span id="shop-address"></span></p>
+      <p><strong>微信：</strong><span id="shop-wechat"></span></p>
+      <p><strong>电话：</strong><span id="shop-phone"></span></p>
+      <p><strong>营业时间：</strong><span id="shop-open"></span></p>
+      <p><strong>服务：</strong><span id="shop-services"></span></p>
+      <p><strong>标签：</strong><span id="shop-tags"></span></p>
+      <p><strong>最后更新：</strong><span id="shop-update"></span></p>
+    </div>
 
-<script src="assets/js/main.js"></script>
-<script>
-  document.getElementById('year').textContent = new Date().getFullYear();
-  initDetailsPage();
-  initGlobalSearchShortcut();
-</script>
+    <!-- 图片区域 -->
+    <div class="details-images" id="shop-images"></div>
+  </main>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      /* ---------- 导航下拉菜单（手机点击 / 电脑悬停） ---------- */
+      const dropdown = document.querySelector(".dropdown");
+      const toggleBtn = document.querySelector(".dropdown-toggle");
+
+      if (dropdown && toggleBtn) {
+        toggleBtn.addEventListener("click", function (e) {
+          e.stopPropagation();
+          dropdown.classList.toggle("open");
+        });
+
+        document.addEventListener("click", function () {
+          dropdown.classList.remove("open");
+        });
+      }
+
+      /* ---------- 商家详情逻辑 ---------- */
+
+      // 1. 从 URL 中取出 ?id=xxx
+      const urlParams = new URLSearchParams(window.location.search);
+      const shopId = urlParams.get("id");
+
+      if (!shopId) {
+        document.querySelector(".details-container").innerHTML =
+          "<h2>未指定商家 ID</h2>";
+        return;
+      }
+
+      // 2. 读取 shops.json 数据
+      fetch("data/shops.json")
+        .then((res) => res.json())
+        .then((data) => {
+          const shop = data.find((item) => item.id === shopId);
+
+          if (!shop) {
+            document.querySelector(".details-container").innerHTML =
+              "<h2>未找到商家信息</h2>";
+            return;
+          }
+
+          const contact = shop.contact || {};
+
+          // 3. 填充文字信息
+          document.getElementById("shop-name").textContent = shop.name || "";
+          document.getElementById("shop-category").textContent =
+            shop.category || "";
+          document.getElementById("shop-type").textContent = shop.type || "";
+          document.getElementById("shop-address").textContent =
+            shop.address || "未提供";
+
+          document.getElementById("shop-wechat").textContent =
+            contact.wechat || "未提供";
+          document.getElementById("shop-phone").textContent =
+            contact.phone || "未提供";
+
+          document.getElementById("shop-open").textContent =
+            shop.open_time || "未提供";
+          document.getElementById("shop-services").textContent =
+            shop.services || "未提供";
+          document.getElementById("shop-tags").textContent =
+            shop.tags || "无";
+          document.getElementById("shop-update").textContent =
+            shop.last_update || "";
+
+          // 4. 渲染图片
+          const imgContainer = document.getElementById("shop-images");
+          imgContainer.innerHTML = "";
+
+          if (shop.images && shop.images.length > 0) {
+            shop.images.forEach((src) => {
+              const img = document.createElement("img");
+              img.src = src;
+              img.alt = shop.name || "";
+              img.className = "shop-photo";
+              imgContainer.appendChild(img);
+            });
+          } else {
+            const p = document.createElement("p");
+            p.textContent = "暂未上传图片";
+            p.style.color = "#666";
+            p.style.fontSize = "0.9rem";
+            imgContainer.appendChild(p);
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+          document.querySelector(".details-container").innerHTML =
+            "<h2>加载商家信息失败，请稍后重试</h2>";
+        });
+    });
+  </script>
 </body>
 </html>
