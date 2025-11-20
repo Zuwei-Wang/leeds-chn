@@ -541,6 +541,23 @@ footer {
   height: 100%;
   object-fit: contain;
   filter: saturate(1.1);
+  transition: opacity 0.3s ease;
+}
+
+/* 懒加载图片样式 */
+.hero-slide img.lazy-load {
+  opacity: 0;
+  background-color: var(--bg-elevated-soft);
+}
+
+.hero-slide img.lazy-load::before {
+  content: '加载中...';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--text-soft);
+  font-size: 14px;
 }
 
 /* 文字说明区域 - 在轮播图下方 */
