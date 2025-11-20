@@ -132,6 +132,13 @@ header {
   font-size: 14px;
 }
 
+/* 将 dropdown 容器也设为 inline-flex，使其与其它链接同行对齐 */
+.nav-right .dropdown {
+  display: inline-flex;
+  align-items: center;
+  position: relative; /* 便于 dropdown-menu 绝对定位 */
+}
+
 .nav-right a {
   position: relative;
   text-decoration: none;
@@ -142,6 +149,15 @@ header {
   height: calc(var(--nav-height) - 20px); /* nav 内部可用高度（去掉上下 padding） */
   padding: 0 2px; /* 仅左右间距，垂直由 height 控制 */
   vertical-align: middle;
+}
+
+/* 统一行高和垂直内边距，确保每个链接基线一致 */
+.nav-right a,
+.nav-right .dropdown-toggle {
+  line-height: calc(var(--nav-height) - 20px);
+  padding-top: 0;
+  padding-bottom: 0;
+  font-size: 14px;
 }
 
 /* 使下拉按钮与导航链接对齐 */
