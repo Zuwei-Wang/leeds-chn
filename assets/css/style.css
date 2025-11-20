@@ -136,8 +136,12 @@ header {
   position: relative;
   text-decoration: none;
   color: var(--text-soft);
-  padding-bottom: 4px;
   transition: color 0.18s ease, opacity 0.18s ease;
+  display: inline-flex;
+  align-items: center;
+  height: calc(var(--nav-height) - 20px); /* nav 内部可用高度（去掉上下 padding） */
+  padding: 0 2px; /* 仅左右间距，垂直由 height 控制 */
+  vertical-align: middle;
 }
 
 /* 使下拉按钮与导航链接对齐 */
@@ -149,11 +153,12 @@ header {
   color: var(--text-soft);
   font-size: 14px;
   cursor: pointer;
-  padding: 0 2px 4px 0; /* 与链接保持相同的下内边距以对齐下划线 */
   display: inline-flex;
   align-items: center;
   gap: 6px;
   position: relative;
+  height: calc(var(--nav-height) - 20px);
+  padding: 0 2px;
 }
 
 .nav-right .dropdown-toggle::after {
