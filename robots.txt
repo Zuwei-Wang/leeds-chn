@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://zuwei-wang.github.io/leeds-chn/sitemap.xml
+Sitemap: https://www.lzlxs.co.uk/sitemap.xml
