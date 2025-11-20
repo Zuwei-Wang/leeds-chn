@@ -5,7 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>商家详情 - 利兹留学生网</title>
   <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="canonical" href="https://lzlxs.co.uk/details.html">
+  <meta name="robots" content="index, follow">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="商家详情 - 利兹留学生网">
+  <meta property="og:description" content="查看利兹本地商家详情。">
+  <meta property="og:url" content="https://lzlxs.co.uk/details.html">
+  <meta property="og:image" content="https://lzlxs.co.uk/assets/banners/banner1.jpg">
+  <meta name="twitter:card" content="summary_large_image">
 
+  <!-- JSON-LD 占位，会在页面加载后由 JS 填充 -->
+  <script type="application/ld+json" id="ld-json">{}</script>
   <!-- 只给详情页用的一点点样式，可以以后挪到 style.css 里 -->
   <style>
     .details-container {
@@ -180,6 +190,63 @@
             shop.tags || "无";
           document.getElementById("shop-update").textContent =
             shop.last_update || "";
+
+          // 更新页面 meta / Open Graph 和 JSON-LD，用于搜索与分享
+          try {
+            document.title = `${shop.name || '商家详情'} - 利兹留学生网`;
+
+            function setMeta(prop, value) {
+              if (!value) return;
+              let selProp = prop.startsWith('og:') ? `meta[property="${prop}"]` : `meta[name="${prop}"]`;
+              let m = document.head.querySelector(selProp);
+              if (!m) {
+                m = document.createElement('meta');
+                if (prop.startsWith('og:')) m.setAttribute('property', prop);
+                else m.setAttribute('name', prop);
+                document.head.appendChild(m);
+              }
+              m.setAttribute('content', value);
+            }
+
+            setMeta('og:title', shop.name || '商家详情');
+            setMeta('og:description', shop.description || shop.services || shop.tags || '利兹留学生网商家信息');
+            setMeta('og:url', location.href);
+
+            if (shop.images && shop.images.length > 0) {
+              const shortId = (shopId || '').split('_').pop();
+              const firstBase = shop.images[0].replace(/\.[^/.]+$/, '');
+              setMeta('og:image', `https://lzlxs.co.uk/assets/images/${shortId}/${firstBase}.jpg`);
+            }
+
+            // 更新 canonical 到包含 id 的详情页 URL
+            const can = document.querySelector('link[rel="canonical"]');
+            if (can) can.href = `https://lzlxs.co.uk/details.html?id=${encodeURIComponent(shopId)}`;
+
+            // 构建 JSON-LD
+            const ld = {
+              "@context": "https://schema.org",
+              "@type": "LocalBusiness",
+              "name": shop.name || '',
+              "image": (shop.images || []).map(img => {
+                const shortId = (shopId || '').split('_').pop();
+                const base = img.replace(/\.[^/.]+$/, '');
+                return `https://lzlxs.co.uk/assets/images/${shortId}/${base}.jpg`;
+              }),
+              "url": `https://lzlxs.co.uk/details.html?id=${encodeURIComponent(shopId)}`,
+              "telephone": (contact && contact.phone) || '',
+              "description": shop.description || shop.services || '',
+              "address": {
+                "@type": "PostalAddress",
+                "addressLocality": "Leeds",
+                "streetAddress": shop.address || ''
+              }
+            };
+
+            const ldNode = document.getElementById('ld-json');
+            if (ldNode) ldNode.textContent = JSON.stringify(ld);
+          } catch (e) {
+            console.error('更新 meta/ld 出错', e);
+          }
 
           // 4. 渲染图片
           const imgContainer = document.getElementById("shop-images");
