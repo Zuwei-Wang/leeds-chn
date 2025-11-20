@@ -12,7 +12,7 @@
     "description": "",
     "services": "",
     "open_time": "12pm-2.30am",
-    "images": ["chef_001-1.jpg"],
+    "images": ["001-1.jpg"],
     "tags": "家常菜",
     "last_update": "2025/11/18"
   },
@@ -54,7 +54,7 @@
     "description": "",
     "services": "",
     "open_time": "",
-    "images": [],
+    "images": ["004-1.jpg"],
     "tags": "家常菜",
     "last_update": "2025/11/18"
   },
@@ -96,7 +96,7 @@
     "description": "",
     "services": "",
     "open_time": "before7pm",
-    "images": [],
+    "images": ["007-1.jpg"],
     "tags": "云南菜",
     "last_update": "2025/11/18"
   },
@@ -110,7 +110,7 @@
     "description": "",
     "services": "",
     "open_time": "",
-    "images": [],
+    "images": ["008-1.jpg"],
     "tags": "特色菜",
     "last_update": "2025/11/18"
   },
@@ -124,7 +124,7 @@
     "description": "",
     "services": "",
     "open_time": "10am-2am",
-    "images": [],
+    "images": ["009-1.jpg"],
     "tags": "家常菜",
     "last_update": "2025/11/18"
   },
@@ -208,7 +208,7 @@
     "description": "",
     "services": "",
     "open_time": "",
-    "images": [],
+    "images": ["015-1.jpg", "015-2.jpg"],
     "tags": "按摩",
     "last_update": "2025/11/19"
   },
@@ -348,7 +348,7 @@
     "description": "",
     "services": "",
     "open_time": "",
-    "images": ["life_025-1.jpg","life_025-2.jpg"],
+    "images": ["025-1.jpg","025-2.jpg"],
     "tags": "麻将",
     "last_update": "2025/11/19"
   },
@@ -378,6 +378,48 @@
     "open_time": "",
     "images": [],
     "tags": "德州扑克",
+    "last_update": "2025/11/19"
+  },
+  {
+    "id": "life_028",
+    "category": "service",
+    "type": "服务",
+    "name": "财哥用车服务",
+    "address": "",
+    "contact": { "wechat": "", "phone": "+44 7460675777" },
+    "description": "",
+    "services": "",
+    "open_time": "",
+    "images": ["028-1.jpg"],
+    "tags": "包车",
+    "last_update": "2025/11/19"
+  },
+  {
+    "id": "chef_029",
+    "category": "food",
+    "type": "私厨",
+    "name": "怡怡馄炖",
+    "address": "",
+    "contact": { "wechat": "", "phone": "" },
+    "description": "",
+    "services": "",
+    "open_time": "",
+    "images": ["029-1.jpg"],
+    "tags": "上海馄炖",
+    "last_update": "2025/11/19"
+  },
+  {
+    "id": "chef_030",
+    "category": "food",
+    "type": "私厨",
+    "name": "葱葱小馆",
+    "address": "",
+    "contact": { "wechat": "", "phone": "" },
+    "description": "",
+    "services": "",
+    "open_time": "",
+    "images": ["030-1.jpg"],
+    "tags": "特色菜",
     "last_update": "2025/11/19"
   }
 ]
