@@ -140,6 +140,42 @@ header {
   transition: color 0.18s ease, opacity 0.18s ease;
 }
 
+/* 使下拉按钮与导航链接对齐 */
+.nav-right .dropdown-toggle {
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  border: none;
+  color: var(--text-soft);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0 2px 4px 0; /* 与链接保持相同的下内边距以对齐下划线 */
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+}
+
+.nav-right .dropdown-toggle::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 0;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-strong));
+  transition: width 0.22s ease;
+}
+
+.nav-right .dropdown-toggle:hover {
+  color: #ffffff;
+}
+
+.nav-right .dropdown-toggle:hover::after {
+  width: 100%;
+}
+
 .nav-right a::after {
   content: "";
   position: absolute;
