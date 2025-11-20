@@ -52,16 +52,68 @@
 
     .details-images {
       margin-top: 1.25rem;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
     }
 
     .details-images .shop-photo {
-      max-width: 180px;
+      width: 100%;
+      max-height: 250px;
       border-radius: 0.6rem;
       border: 1px solid #eee;
-      object-fit: cover;
+      object-fit: contain;
+      background: #f8f9fa;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .details-images .shop-photo:hover {
+      transform: scale(1.02);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    /* 图片放大预览样式 */
+    .image-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 1000;
+      cursor: pointer;
+    }
+
+    .image-modal.show {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .image-modal img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 8px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+      object-fit: contain;
+      background: white;
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      color: white;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 1001;
+    }
+
+    .close-modal:hover {
+      opacity: 0.7;
     }
 
     @media (max-width: 600px) {
@@ -69,10 +121,17 @@
         padding: 0 0.75rem 2rem;
       }
       .details-images {
-        justify-content: flex-start;
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
       }
       .details-images .shop-photo {
-        max-width: 45%;
+        max-height: 200px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .details-images .shop-photo {
+        max-height: 180px;
       }
     }
   </style>
@@ -125,6 +184,12 @@
     <!-- 图片区域 -->
     <div class="details-images" id="shop-images"></div>
   </main>
+
+  <!-- 图片放大预览模态框 -->
+  <div class="image-modal" id="imageModal">
+    <span class="close-modal" id="closeModal">&times;</span>
+    <img id="modalImage" src="" alt="">
+  </div>
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -262,6 +327,16 @@
               img.src = `assets/images/${shortId}/${base}.jpg`;
               img.alt = shop.name || "";
               img.className = "shop-photo";
+              
+              // 添加点击放大功能
+              img.addEventListener('click', function() {
+                const modal = document.getElementById('imageModal');
+                const modalImg = document.getElementById('modalImage');
+                modal.classList.add('show');
+                modalImg.src = this.src;
+                modalImg.alt = this.alt;
+              });
+              
               imgContainer.appendChild(img);
             });
           } else {
@@ -271,6 +346,29 @@
             p.style.fontSize = "0.9rem";
             imgContainer.appendChild(p);
           }
+
+          // 5. 设置图片模态框关闭功能
+          const modal = document.getElementById('imageModal');
+          const closeModal = document.getElementById('closeModal');
+
+          // 点击关闭按钮关闭模态框
+          closeModal.addEventListener('click', function() {
+            modal.classList.remove('show');
+          });
+
+          // 点击模态框背景关闭模态框
+          modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+              modal.classList.remove('show');
+            }
+          });
+
+          // 按ESC键关闭模态框
+          document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && modal.classList.contains('show')) {
+              modal.classList.remove('show');
+            }
+          });
         })
         .catch((err) => {
           console.error(err);
