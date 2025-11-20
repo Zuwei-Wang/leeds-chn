@@ -11,7 +11,7 @@ let cachedShopsData = null;
 
 /**
  * 读取全部商家数据
- * 优先从 Google Sheet 读取，失败则从本地 JSON 读取
+ * 从本地 JSON 文件加载
  */
 async function loadShops() {
   // 如果数据已缓存，直接返回
@@ -20,36 +20,19 @@ async function loadShops() {
   }
 
   try {
-    // 尝试从 Google Sheet 加载
-    let data = await loadShopsFromGoogleSheet();
-    
-    if (!data || data.length === 0) {
-      // fallback 到本地 JSON
-      // const res = await fetch(DATA_URL);
-      // if (!res.ok) {
-      //   throw new Error('加载数据失败：' + res.status);
-      // }
-      // data = await res.json();
-      console.warn('Google Sheet 和本地 JSON 都无法加载数据');
-      data = [];
+    console.log('正在从本地JSON加载商家数据...');
+    const res = await fetch(DATA_URL);
+    if (!res.ok) {
+      throw new Error(`加载数据失败：HTTP ${res.status}`);
     }
-
+    const data = await res.json();
     cachedShopsData = Array.isArray(data) ? data : [];
+    console.log(`成功加载 ${cachedShopsData.length} 条商家数据`);
     return cachedShopsData;
   } catch (err) {
     console.error('加载商家数据出错:', err);
-    // 最终 fallback：从本地 JSON 加载
-    // try {
-    //   const res = await fetch(DATA_URL);
-    //   if (res.ok) {
-    //     const data = await res.json();
-    //     cachedShopsData = Array.isArray(data) ? data : [];
-    //     return cachedShopsData;
-    //   }
-    // } catch (fallbackErr) {
-    //   console.error('本地 JSON 加载也失败:', fallbackErr);
-    // }
-    return [];
+    cachedShopsData = [];
+    return cachedShopsData;
   }
 }
 
