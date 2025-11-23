@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API 测试页面</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 0 20px;
+    }
+    .test-section {
+      margin: 20px 0;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+    .test-section h2 {
+      margin-top: 0;
+      color: #333;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 5px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .result {
+      margin-top: 10px;
+      padding: 15px;
+      background: #f5f5f5;
+      border-radius: 4px;
+      white-space: pre-wrap;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    .success {
+      color: green;
+      font-weight: bold;
+    }
+    .error {
+      color: red;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔧 后端 API 集成测试</h1>
+  
+  <div class="test-section">
+    <h2>1. 测试 Ping 接口</h2>
+    <button onclick="testPing()">测试 /ping</button>
+    <div id="ping-result" class="result"></div>
+  </div>
+
+  <div class="test-section">
+    <h2>2. 测试获取所有商家</h2>
+    <button onclick="testGetAllShops()">测试 /api/shops</button>
+    <div id="shops-result" class="result"></div>
+  </div>
+
+  <div class="test-section">
+    <h2>3. 测试获取单个商家</h2>
+    <input type="text" id="shop-id" placeholder="输入商家ID (如: chef_001)" value="chef_001" style="padding: 8px; width: 200px;">
+    <button onclick="testGetShopById()">测试 /api/shops/{id}</button>
+    <div id="shop-result" class="result"></div>
+  </div>
+
+  <div class="test-section">
+    <h2>4. 测试按分类获取商家</h2>
+    <select id="category" style="padding: 8px;">
+      <option value="food">餐饮</option>
+      <option value="entertainment">娱乐</option>
+      <option value="service">服务</option>
+    </select>
+    <button onclick="testGetShopsByCategory()">测试 /api/shops/category/{category}</button>
+    <div id="category-result" class="result"></div>
+  </div>
+
+  <div class="test-section">
+    <h2>5. 测试前端 main.js 集成</h2>
+    <button onclick="testFrontendIntegration()">测试 loadShops() 函数</button>
+    <div id="frontend-result" class="result"></div>
+  </div>
+
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script>
+    const API_BASE = 'http://localhost:8000';
+
+    async function testPing() {
+      const resultDiv = document.getElementById('ping-result');
+      resultDiv.innerHTML = '正在测试...';
+      
+      try {
+        const response = await fetch(`${API_BASE}/ping`);
+        const data = await response.json();
+        resultDiv.innerHTML = `<span class="success">✓ 成功</span>\n${JSON.stringify(data, null, 2)}`;
+      } catch (error) {
+        resultDiv.innerHTML = `<span class="error">✗ 失败</span>\n${error.message}`;
+      }
+    }
+
+    async function testGetAllShops() {
+      const resultDiv = document.getElementById('shops-result');
+      resultDiv.innerHTML = '正在测试...';
+      
+      try {
+        const response = await fetch(`${API_BASE}/api/shops`);
+        const data = await response.json();
+        resultDiv.innerHTML = `<span class="success">✓ 成功</span>\n共获取 ${data.length} 个商家\n\n前3个商家:\n${JSON.stringify(data.slice(0, 3), null, 2)}`;
+      } catch (error) {
+        resultDiv.innerHTML = `<span class="error">✗ 失败</span>\n${error.message}`;
+      }
+    }
+
+    async function testGetShopById() {
+      const resultDiv = document.getElementById('shop-result');
+      const shopId = document.getElementById('shop-id').value;
+      resultDiv.innerHTML = '正在测试...';
+      
+      try {
+        const response = await fetch(`${API_BASE}/api/shops/${encodeURIComponent(shopId)}`);
+        const data = await response.json();
+        
+        if (data.error) {
+          resultDiv.innerHTML = `<span class="error">✗ ${data.error}</span>\n${JSON.stringify(data, null, 2)}`;
+        } else {
+          resultDiv.innerHTML = `<span class="success">✓ 成功</span>\n${JSON.stringify(data, null, 2)}`;
+        }
+      } catch (error) {
+        resultDiv.innerHTML = `<span class="error">✗ 失败</span>\n${error.message}`;
+      }
+    }
+
+    async function testGetShopsByCategory() {
+      const resultDiv = document.getElementById('category-result');
+      const category = document.getElementById('category').value;
+      resultDiv.innerHTML = '正在测试...';
+      
+      try {
+        const response = await fetch(`${API_BASE}/api/shops/category/${category}`);
+        const data = await response.json();
+        resultDiv.innerHTML = `<span class="success">✓ 成功</span>\n${category} 分类共 ${data.length} 个商家\n\n${JSON.stringify(data.slice(0, 3), null, 2)}`;
+      } catch (error) {
+        resultDiv.innerHTML = `<span class="error">✗ 失败</span>\n${error.message}`;
+      }
+    }
+
+    async function testFrontendIntegration() {
+      const resultDiv = document.getElementById('frontend-result');
+      resultDiv.innerHTML = '正在测试...';
+      
+      try {
+        // 清空缓存
+        cachedShopsData = null;
+        
+        const data = await loadShops();
+        resultDiv.innerHTML = `<span class="success">✓ 成功</span>\n通过 loadShops() 获取 ${data.length} 个商家\n\n前3个商家:\n${JSON.stringify(data.slice(0, 3), null, 2)}`;
+      } catch (error) {
+        resultDiv.innerHTML = `<span class="error">✗ 失败</span>\n${error.message}`;
+      }
+    }
+
+    // 页面加载时自动运行 ping 测试
+    window.onload = () => {
+      console.log('API 配置:', window.API_CONFIG);
+      testPing();
+    };
+  </script>
+</body>
+</html>

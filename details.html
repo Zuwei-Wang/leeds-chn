@@ -191,6 +191,7 @@
     <img id="modalImage" src="" alt="">
   </div>
 
+  <script src="assets/js/config.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       /* ---------- 导航下拉菜单（手机点击 / 电脑悬停） ---------- */
@@ -220,10 +221,50 @@
         return;
       }
 
-      // 2. 读取 shops.json 数据
-      fetch("data/shops.json")
-        .then((res) => res.json())
-        .then((data) => {
+      // 2. 读取商家数据（优先API，降级本地JSON）
+      const API_BASE_URL = 'http://localhost:8000';
+      const API_URL = `${API_BASE_URL}/api/shops/${encodeURIComponent(shopId)}`;
+      const FALLBACK_URL = "data/shops.json";
+
+      // 尝试从 API 获取单个商家数据
+      fetch(API_URL)
+        .then((res) => {
+          if (!res.ok) throw new Error('API请求失败');
+          return res.json();
+        })
+        .then((shop) => {
+          // 如果API返回错误对象
+          if (shop.error) {
+            throw new Error(shop.error);
+          }
+          // 直接使用单个商家数据
+          renderShopDetails(shop);
+        })
+        .catch((err) => {
+          console.warn('从API加载失败，降级到本地JSON:', err);
+          // 降级：从本地 JSON 获取所有数据并查找
+          fetch(FALLBACK_URL)
+            .then((res) => res.json())
+            .then((data) => {
+              const shop = data.find((item) => item.id === shopId);
+              if (shop) {
+                renderShopDetails(shop);
+              } else {
+                document.querySelector(".details-container").innerHTML =
+                  "<h2>未找到商家信息</h2>";
+              }
+            })
+            .catch((fallbackErr) => {
+              console.error('加载商家信息完全失败:', fallbackErr);
+              document.querySelector(".details-container").innerHTML =
+                "<h2>加载商家信息失败，请稍后重试</h2>";
+            });
+        });
+
+      // 提取渲染逻辑为函数
+      function renderShopDetails(shop) {
+        const data = [shop];  // 兼容原有逻辑
+        {
           const shop = data.find((item) => item.id === shopId);
 
           if (!shop) {
@@ -369,12 +410,8 @@
               modal.classList.remove('show');
             }
           });
-        })
-        .catch((err) => {
-          console.error(err);
-          document.querySelector(".details-container").innerHTML =
-            "<h2>加载商家信息失败，请稍后重试</h2>";
-        });
+        }
+      }
     });
   </script>
 </body>
