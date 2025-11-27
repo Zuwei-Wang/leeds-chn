@@ -1,9 +1,7 @@
 // assets/js/main.js
 
-// API 配置：优先使用后端 API，降级到本地 JSON
-const API_BASE_URL = 'http://localhost:8000';
-const API_URL = `${API_BASE_URL}/api/shops`;
-const DATA_URL = 'data/shops.json';  // 本地 fallback
+// 数据文件路径
+const DATA_URL = 'data/shops.json';
 
 // 娱乐页额外要包含的 type（之后可以自己往里加）
 const ENTERTAINMENT_EXTRA_TYPES = ['KTV'];
@@ -13,7 +11,7 @@ let cachedShopsData = null;
 
 /**
  * 读取全部商家数据
- * 优先从后端 API 加载，失败时降级到本地 JSON 文件
+ * 从本地 JSON 文件加载
  */
 async function loadShops() {
   // 如果数据已缓存，直接返回
@@ -22,34 +20,19 @@ async function loadShops() {
   }
 
   try {
-    // 首先尝试从后端 API 加载
-    console.log('正在从后端API加载商家数据...');
-    const res = await fetch(API_URL);
+    console.log('正在从本地JSON加载商家数据...');
+    const res = await fetch(DATA_URL);
     if (!res.ok) {
-      throw new Error(`API 请求失败：HTTP ${res.status}`);
+      throw new Error(`加载数据失败：HTTP ${res.status}`);
     }
     const data = await res.json();
     cachedShopsData = Array.isArray(data) ? data : [];
-    console.log(`成功从API加载 ${cachedShopsData.length} 条商家数据`);
+    console.log(`成功加载 ${cachedShopsData.length} 条商家数据`);
     return cachedShopsData;
   } catch (err) {
-    console.warn('从API加载数据失败，尝试降级到本地JSON:', err);
-    
-    // 降级：尝试从本地 JSON 加载
-    try {
-      const res = await fetch(DATA_URL);
-      if (!res.ok) {
-        throw new Error(`加载本地数据失败：HTTP ${res.status}`);
-      }
-      const data = await res.json();
-      cachedShopsData = Array.isArray(data) ? data : [];
-      console.log(`从本地JSON加载 ${cachedShopsData.length} 条商家数据`);
-      return cachedShopsData;
-    } catch (fallbackErr) {
-      console.error('加载商家数据完全失败:', fallbackErr);
-      cachedShopsData = [];
-      return cachedShopsData;
-    }
+    console.error('加载商家数据出错:', err);
+    cachedShopsData = [];
+    return cachedShopsData;
   }
 }
 
