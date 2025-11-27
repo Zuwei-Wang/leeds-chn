@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商家管理后台 - 利兹华人网</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .tabs {
+            display: flex;
+            background: #f5f5f5;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            background: #f5f5f5;
+            border: none;
+            font-size: 16px;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s;
+        }
+
+        .tab:hover {
+            background: #e8e8e8;
+        }
+
+        .tab.active {
+            background: white;
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 30px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .image-upload-area {
+            border: 3px dashed #d0d0d0;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            background: #fafafa;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .image-upload-area:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .image-upload-area.dragover {
+            border-color: #667eea;
+            background: #e8f0ff;
+        }
+
+        .image-upload-area .icon {
+            font-size: 48px;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .image-preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .image-preview-item {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid #e0e0e0;
+        }
+
+        .image-preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image-preview-item .remove-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(255, 0, 0, 0.8);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            font-size: 16px;
+            line-height: 1;
+            transition: background 0.3s;
+        }
+
+        .image-preview-item .remove-btn:hover {
+            background: rgba(255, 0, 0, 1);
+        }
+
+        .btn {
+            padding: 14px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: #f5f5f5;
+            color: #666;
+            margin-right: 10px;
+        }
+
+        .btn-secondary:hover {
+            background: #e8e8e8;
+        }
+
+        .shop-list {
+            display: grid;
+            gap: 15px;
+        }
+
+        .shop-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            gap: 15px;
+            transition: all 0.3s;
+        }
+
+        .shop-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .shop-card-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 8px;
+            object-fit: cover;
+            background: #f0f0f0;
+        }
+
+        .shop-card-info {
+            flex: 1;
+        }
+
+        .shop-card-info h3 {
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .shop-card-info p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .shop-card-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        .btn-edit {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-delete {
+            background: #ff4757;
+            color: white;
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .message.show {
+            display: block;
+            animation: slideDown 0.3s;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .help-text {
+            font-size: 12px;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 5px;
+        }
+
+        .badge-food {
+            background: #ffe0b2;
+            color: #e65100;
+        }
+
+        .badge-entertainment {
+            background: #f3e5f5;
+            color: #6a1b9a;
+        }
+
+        .badge-service {
+            background: #e1f5fe;
+            color: #01579b;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+
+        .empty-state .icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏪 商家管理后台</h1>
+            <p>轻松管理您的商家信息 - 无需编程知识</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('add')">➕ 添加商家</button>
+            <button class="tab" onclick="switchTab('manage')">📋 管理商家</button>
+            <button class="tab" onclick="switchTab('export')">💾 导出数据</button>
+        </div>
+
+        <!-- 添加商家 -->
+        <div id="add-tab" class="tab-content active">
+            <div id="message" class="message"></div>
+            
+            <form id="shopForm">
+                <div class="form-group">
+                    <label>商家分类 *</label>
+                    <select id="category" required>
+                        <option value="">请选择分类</option>
+                        <option value="food">🍜 美食餐饮</option>
+                        <option value="entertainment">🎮 休闲娱乐</option>
+                        <option value="service">🛠️ 生活服务</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>商家类型 *</label>
+                        <input type="text" id="type" placeholder="例如：私厨、火锅店、理发店" required>
+                        <div class="help-text">商家的具体类型</div>
+                    </div>
+                    <div class="form-group">
+                        <label>商家名称 *</label>
+                        <input type="text" id="name" placeholder="例如：一日三餐" required>
+                        <div class="help-text">商家的名字</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>商家地址</label>
+                    <input type="text" id="address" placeholder="例如：Leeds LS2 9JT">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>微信号</label>
+                        <input type="text" id="wechat" placeholder="输入微信号">
+                    </div>
+                    <div class="form-group">
+                        <label>电话号码</label>
+                        <input type="text" id="phone" placeholder="输入电话号码">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>商家描述</label>
+                    <textarea id="description" placeholder="简单介绍一下这家店..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>提供服务</label>
+                    <textarea id="services" placeholder="例如：堂食、外卖、预订等"></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>营业时间</label>
+                        <input type="text" id="openTime" placeholder="例如：12pm-2:30am">
+                    </div>
+                    <div class="form-group">
+                        <label>标签</label>
+                        <input type="text" id="tags" placeholder="例如：家常菜、特色菜">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>商家图片</label>
+                    <div class="image-upload-area" id="uploadArea">
+                        <div class="icon">📷</div>
+                        <p><strong>点击或拖拽图片到这里</strong></p>
+                        <p class="help-text">支持 JPG、PNG 格式，可上传多张图片</p>
+                    </div>
+                    <input type="file" id="fileInput" accept="image/*" multiple>
+                    <div id="imagePreview" class="image-preview"></div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">✅ 保存商家信息</button>
+            </form>
+        </div>
+
+        <!-- 管理商家 -->
+        <div id="manage-tab" class="tab-content">
+            <div class="form-group">
+                <input type="text" id="searchInput" placeholder="🔍 搜索商家名称..." style="margin-bottom: 20px;">
+            </div>
+            <div id="shopList" class="shop-list">
+                <!-- 商家列表将动态加载 -->
+            </div>
+        </div>
+
+        <!-- 导出数据 -->
+        <div id="export-tab" class="tab-content">
+            <div style="text-align: center; padding: 40px;">
+                <div class="icon" style="font-size: 80px; margin-bottom: 20px;">💾</div>
+                <h2 style="margin-bottom: 20px;">导出商家数据</h2>
+                <p style="color: #666; margin-bottom: 30px;">
+                    将所有商家数据导出为 JSON 文件<br>
+                    可用于备份或在其他地方使用
+                </p>
+                <button onclick="exportData()" class="btn btn-primary" style="max-width: 300px;">
+                    📥 下载 shops.json
+                </button>
+                <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 10px; text-align: left;">
+                    <h3 style="margin-bottom: 10px;">📊 当前数据统计</h3>
+                    <p>商家总数：<strong id="totalShops">0</strong></p>
+                    <p>美食餐饮：<strong id="foodCount">0</strong></p>
+                    <p>休闲娱乐：<strong id="entertainmentCount">0</strong></p>
+                    <p>生活服务：<strong id="serviceCount">0</strong></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/admin.js"></script>
+</body>
+</html>
