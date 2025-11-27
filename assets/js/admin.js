@@ -136,26 +136,18 @@ function handleSubmit(e) {
         return;
     }
     
-    // 生成商家ID
-    const categoryPrefix = {
-        'food': 'chef',
-        'entertainment': 'ent',
-        'service': 'srv'
-    };
-    
-    const prefix = categoryPrefix[category];
+    // 生成商家ID（纯数字，3位格式）
     const existingIds = shops
-        .filter(s => s.id.startsWith(prefix))
-        .map(s => parseInt(s.id.split('_')[1]))
+        .map(s => parseInt(s.id))
         .filter(n => !isNaN(n));
     
     const nextNumber = existingIds.length > 0 ? Math.max(...existingIds) + 1 : 1;
-    const shopId = editingShopId || `${prefix}_${String(nextNumber).padStart(3, '0')}`;
+    const shopId = editingShopId || String(nextNumber).padStart(3, '0');
     
     // 处理图片文件名
     const imageFiles = uploadedImages.map((img, index) => {
         const ext = img.name.split('.').pop();
-        return `${String(nextNumber).padStart(3, '0')}-${index + 1}.${ext}`;
+        return `${shopId}-${index + 1}.${ext}`;
     });
     
     // 创建商家对象
@@ -232,7 +224,7 @@ function renderShopList() {
         };
         
         const imageSrc = shop.images && shop.images.length > 0 
-            ? `assets/images/${shop.id.split('_')[1]}/${shop.images[0]}`
+            ? `assets/images/${shop.id}/${shop.images[0]}`
             : 'assets/images/placeholder.jpg';
         
         return `

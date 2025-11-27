@@ -68,7 +68,7 @@ function parseTags(tagsStr) {
 
 /**
  * 工具：解析 images
- * 例如 "chef_001-1.jpg, chef_001-2.jpg"
+ * 例如 "001-1.jpg, 001-2.jpg"
  */
 function parseImages(imagesStr) {
   if (!imagesStr) return [];
@@ -233,7 +233,7 @@ async function initCategoryPage(targetCategory) {
  * - 菜单图片或 PDF
  *
  * 需要在 shops.json 里可选新增字段：
- * - "menu": "chef_001-menu.jpg" 或 "chef_001-menu.pdf"
+ * - "menu": "001-menu.jpg" 或 "001-menu.pdf"
  */
 async function initDetailsPage() {
   const container = document.getElementById('detail-container');
